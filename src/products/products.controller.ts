@@ -15,7 +15,7 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/products.dto';
 import { Product } from './products.schema';
-import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -32,7 +32,37 @@ export class ProductsController {
   }
 
   @Get()
-  async findAll(@Query() query): Promise<Product[]> {
+  @ApiQuery({
+    name: 'name',
+    required: false,
+    type: String,
+    description: 'Ürün adı',
+  })
+  @ApiQuery({
+    name: 'minPrice',
+    required: false,
+    type: Number,
+    description: 'En düşük fiyat',
+  })
+  @ApiQuery({
+    name: 'maxPrice',
+    required: false,
+    type: Number,
+    description: 'En yüksek fiyat',
+  })
+  @ApiQuery({
+    name: 'sortBy',
+    required: false,
+    type: String,
+    description: 'Sıralama alanı',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    type: String,
+    description: 'Sıralama yönü (asc/desc)',
+  })
+  async findAll(@Query() query: any) {
     return this.productsService.findAll(query);
   }
 
